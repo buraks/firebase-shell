@@ -1,9 +1,9 @@
 Query = 
-	KeywordSelect  Whitespace 
-    fields:Fields  Whitespace
-    KeywordFrom    Whitespace
-    path:Path      Whitespace?
-    KeywordLimit?  Whitespace? limit:Number? { 
+	fields:SelectStatement  
+    Whitespace
+    path: FromStatement     
+    Whitespace?
+    limit:LimitStatement? { 
     	return {
             fields,
             path,
@@ -11,9 +11,33 @@ Query =
         };
     }
     
-KeywordSelect = "select"i
-KeywordFrom = "from"i
-KeywordLimit = "limit"i
+SelectStatement = 
+	KeywordSelect 
+    Whitespace 
+    fields:Fields {
+      return fields;
+  }
+  
+FromStatement = 
+	KeywordFrom
+    Whitespace
+    path:Path {
+    	return path;
+    }
+    
+LimitStatement = 
+	KeywordLimit
+    Whitespace
+    limit:Number { 
+    	return limit 
+    }
+    
+KeywordSelect = 
+    "select"i
+KeywordFrom = 
+    "from"i
+KeywordLimit = 
+    "limit"i
     
 Fields = 
 	"*"
@@ -43,4 +67,6 @@ PathSeperator = "/"
 Comma = ","
 Whitespace = Space+
 Space = " "
-Number = d:[0-9]+ { return Number(d.join('')) }
+Number = d:[0-9]+ { 
+    return Number(d.join('')) 
+}
