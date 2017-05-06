@@ -3,11 +3,15 @@ Query =
     Whitespace
     path: FromStatement
     Whitespace?
-    limit:LimitStatement? {
+    where:WhereStatement?
+    Whitespace?
+    limit:LimitStatement?
+    Whitespace? {
     	return {
             fields,
             path,
             limit,
+            where
         };
     }
 
@@ -32,6 +36,21 @@ LimitStatement =
     	return limit
     }
 
+WhereStatement =
+	KeywordWhere
+    Whitespace
+    path:Path
+    Whitespace
+    operator:Operator
+    Whitespace
+    value:(Number / String) {
+    	return {
+        	path,
+            operator,
+            value
+        };
+    }
+
 KeywordSelect =
     "select"i
 
@@ -40,6 +59,9 @@ KeywordFrom =
 
 KeywordLimit =
     "limit"i
+
+KeywordWhere =
+	"where"i
 
 Fields =
 	"*"
@@ -71,6 +93,12 @@ PathSeperator =
 Comma =
     ","
 
+Operator =
+	"==" { return '='; } /
+    ">=" /
+    "<=" /
+    "="
+
 Whitespace =
     Space+
 
@@ -80,4 +108,12 @@ Space =
 Number =
     d:[0-9]+ {
         return Number(d.join(''))
+    }
+
+String =
+    '"' chars:[^"]* '"' {
+        return chars.join('');
+    } /
+    "'" chars:[^']* "'" {
+    	return chars.join('');
     }
