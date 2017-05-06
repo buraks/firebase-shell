@@ -1,45 +1,47 @@
-Query = 
-	fields:SelectStatement  
+Query =
+	fields:SelectStatement
     Whitespace
-    path: FromStatement     
+    path: FromStatement
     Whitespace?
-    limit:LimitStatement? { 
+    limit:LimitStatement? {
     	return {
             fields,
             path,
             limit,
         };
     }
-    
-SelectStatement = 
-	KeywordSelect 
-    Whitespace 
+
+SelectStatement =
+	KeywordSelect
+    Whitespace
     fields:Fields {
       return fields;
   }
-  
-FromStatement = 
+
+FromStatement =
 	KeywordFrom
     Whitespace
     path:Path {
     	return path;
     }
-    
-LimitStatement = 
+
+LimitStatement =
 	KeywordLimit
     Whitespace
-    limit:Number { 
-    	return limit 
+    limit:Number {
+    	return limit
     }
-    
-KeywordSelect = 
+
+KeywordSelect =
     "select"i
-KeywordFrom = 
+
+KeywordFrom =
     "from"i
-KeywordLimit = 
+
+KeywordLimit =
     "limit"i
-    
-Fields = 
+
+Fields =
 	"*"
     / head:Path tail:(Whitespace? Comma Whitespace? Path)* {
     	var result = [head];
@@ -47,8 +49,8 @@ Fields =
       		result.push(tail[i][3]);
     	}
     	return result;
-    }	
-    
+    }
+
 Path =
 	head:Key tail:(PathSeperator Key)* {
     	let path = head;
@@ -57,16 +59,25 @@ Path =
         }
         return path;
     }
-    
-Key = 
+
+Key =
 	k:[^\.\$#\[\]\/ ,]+ {
     	return k.join('');
     }
-  
-PathSeperator = "/"
-Comma = ","
-Whitespace = Space+
-Space = " "
-Number = d:[0-9]+ { 
-    return Number(d.join('')) 
-}
+
+PathSeperator =
+    "/"
+
+Comma =
+    ","
+
+Whitespace =
+    Space+
+
+Space =
+    " "
+
+Number =
+    d:[0-9]+ {
+        return Number(d.join(''))
+    }
