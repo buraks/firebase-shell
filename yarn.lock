@@ -33,7 +33,7 @@ faye-websocket@0.9.3:
   dependencies:
     websocket-driver ">=0.5.1"
 
-firebase-admin@^4.2.1:
+firebase-admin@4.2.1:
   version "4.2.1"
   resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-4.2.1.tgz#91794bfc214ee21decc765d308411166a05c0b20"
   dependencies:
@@ -97,9 +97,9 @@ ms@^0.7.1:
   version "0.7.3"
   resolved "https://registry.yarnpkg.com/ms/-/ms-0.7.3.tgz#708155a5e44e33f5fd0fc53e81d0d40a91be1fff"
 
-node-sqlparser@^1.0.2:
-  version "1.0.2"
-  resolved "https://registry.yarnpkg.com/node-sqlparser/-/node-sqlparser-1.0.2.tgz#0eb70c9b549de6d3de16a5904ad31237f07ff552"
+pegjs@0.10.0:
+  version "0.10.0"
+  resolved "https://registry.yarnpkg.com/pegjs/-/pegjs-0.10.0.tgz#cf8bafae6eddff4b5a7efb185269eaaf4610ddbd"
 
 safe-buffer@^5.0.1:
   version "5.0.1"
