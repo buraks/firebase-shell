@@ -1,0 +1,46 @@
+Query = 
+	KeywordSelect  Whitespace 
+    fields:Fields  Whitespace
+    KeywordFrom    Whitespace
+    path:Path      Whitespace?
+    KeywordLimit?  Whitespace? limit:Number? { 
+    	return {
+            fields,
+            path,
+            limit,
+        };
+    }
+    
+KeywordSelect = "select"i
+KeywordFrom = "from"i
+KeywordLimit = "limit"i
+    
+Fields = 
+	"*"
+    / head:Path tail:(Whitespace? Comma Whitespace? Path)* {
+    	var result = [head];
+    	for (var i = 0; i < tail.length; i++) {
+      		result.push(tail[i][3]);
+    	}
+    	return result;
+    }	
+    
+Path =
+	head:Key tail:(PathSeperator Key)* {
+    	let path = head;
+        for (const p of tail) {
+        	path += '/' + p[1];
+        }
+        return path;
+    }
+    
+Key = 
+	k:[^\.\$#\[\]\/ ,]+ {
+    	return k.join('');
+    }
+  
+PathSeperator = "/"
+Comma = ","
+Whitespace = Space+
+Space = " "
+Number = d:[0-9]+ { return Number(d.join('')) }
