@@ -16,6 +16,7 @@
   "scripts": {
     "build": "pegjs -o src/parser.js src/grammar.pegjs",
     "format": "prettier --write --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js'",
+    "pretest": "yarn run build",
     "test": "jest"
   }
 }
