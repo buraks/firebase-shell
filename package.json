@@ -21,6 +21,6 @@
     "format": "prettier --write --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js'",
     "lint": "eslint .",
     "pretest": "yarn run build-parser",
-    "test": "jest"
+    "test": "jest --coverage"
   }
 }

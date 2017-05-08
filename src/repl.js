@@ -16,13 +16,18 @@ class Repl {
     }
 
     onSubmit(event) {
-        return query({
+        const queryOptions = {
             credentials: this.credentials,
             auth: this.auth,
             url: this.url,
             query: event.answer.query,
-        })
+        };
+
+        const startTime = process.hrtime();
+
+        return query(queryOptions)
             .then(results => {
+                const [seconds, nanoSeconds] = process.hrtime(startTime);
                 const table = new Table({
                     head: ['Key', 'Value'],
                 });
@@ -41,6 +46,9 @@ class Repl {
 
                 console.log(table.toString());
                 console.log(`Results: ${resultsCount}`);
+                console.log(
+                    `Time taken: ${seconds} seconds ${nanoSeconds / 1000000} ms`
+                );
             })
             .catch(e => {
                 console.log('error', e);

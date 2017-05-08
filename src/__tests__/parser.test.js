@@ -29,6 +29,15 @@ const parser = require('../parser');
         },
     ],
     [
+        'SELECT foo,bar,baz/bop FROM stuff',
+        {
+            fields: ['foo', 'bar', 'baz/bop'],
+            limit: null,
+            path: 'stuff',
+            where: null,
+        },
+    ],
+    [
         'SELECT foo/bar FROM baz/bop LIMIT 10',
         {
             fields: ['foo/bar'],
@@ -63,8 +72,103 @@ const parser = require('../parser');
             },
         },
     ],
+    [
+        'SELECT * FROM customers WHERE name = "Harry"',
+        {
+            fields: '*',
+            limit: null,
+            path: 'customers',
+            where: {
+                path: 'name',
+                operator: '=',
+                value: 'Harry',
+            },
+        },
+    ],
+    [
+        "SELECT * FROM customers WHERE name = 'Harry'",
+        {
+            fields: '*',
+            limit: null,
+            path: 'customers',
+            where: {
+                path: 'name',
+                operator: '=',
+                value: 'Harry',
+            },
+        },
+    ],
 ].forEach(([query, result]) => {
     test(`Parsing query: ${query}`, () => {
         expect(parser.parse(query)).toEqual(result);
+    });
+});
+
+[
+    [
+        'foo',
+        'Expected "select" but "f" found.',
+        {
+            column: 1,
+            line: 1,
+            offset: 0,
+        },
+        {
+            column: 2,
+            line: 1,
+            offset: 1,
+        },
+    ],
+    [
+        'select wiggle',
+        'Expected " ", ",", "/", or [^.$#[\\]/ ,] but end of input found.',
+        {
+            column: 14,
+            line: 1,
+            offset: 13,
+        },
+        {
+            column: 14,
+            line: 1,
+            offset: 13,
+        },
+    ],
+    [
+        'select wiggle from not$a$valid$path',
+        'Expected " ", "/", "limit", "where", [^.$#[\\]/ ,], or end of input but "$" found.',
+        {
+            column: 23,
+            line: 1,
+            offset: 22,
+        },
+        {
+            column: 24,
+            line: 1,
+            offset: 23,
+        },
+    ],
+    [
+        'select bob from bill where tool ~ hammer',
+        'Expected " ", "<=", "=", "==", or ">=" but "~" found.',
+        {
+            column: 33,
+            line: 1,
+            offset: 32,
+        },
+        {
+            column: 34,
+            line: 1,
+            offset: 33,
+        },
+    ],
+].forEach(([query, message, start, end]) => {
+    test(`Parsing error: ${query}`, () => {
+        try {
+            parser.parse(query);
+        } catch (e) {
+            expect(e.message).toBe(message);
+            expect(e.location.start).toEqual(start);
+            expect(e.location.end).toEqual(end);
+        }
     });
 });
