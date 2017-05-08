@@ -6,6 +6,8 @@
   "dependencies": {
     "cli-table": "0.3.1",
     "commander": "2.9.0",
+    "eslint": "3.19.0",
+    "eslint-config-prettier": "2.0.0",
     "firebase-admin": "4.2.1",
     "inquirer": "3.0.6",
     "jest": "20.0.0",
@@ -15,9 +17,10 @@
     "rx": "4.1.0"
   },
   "scripts": {
-    "build": "pegjs -o src/parser.js src/grammar.pegjs",
+    "build-parser": "pegjs -o src/parser.js src/grammar.pegjs",
     "format": "prettier --write --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js'",
-    "pretest": "yarn run build",
+    "lint": "eslint .",
+    "pretest": "yarn run build-parser",
     "test": "jest"
   }
 }
