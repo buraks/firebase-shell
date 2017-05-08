@@ -4,14 +4,18 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
+    "cli-table": "0.3.1",
+    "commander": "2.9.0",
     "firebase-admin": "4.2.1",
+    "inquirer": "3.0.6",
     "jest": "20.0.0",
+    "lodash": "4.17.4",
     "pegjs": "0.10.0",
     "prettier": "1.3.1"
   },
   "scripts": {
     "build": "pegjs -o src/parser.js src/grammar.pegjs",
-    "format": "prettier --write --single-quote --trailing-comma all --tab-width 4 src/**/*.js",
+    "format": "prettier --write --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js'",
     "test": "jest"
   }
 }
