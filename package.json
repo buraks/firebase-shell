@@ -1,9 +1,11 @@
 {
   "name": "firebase-shell",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "main": "index.js",
   "license": "MIT",
+  "bin": "./src/cli.js",
   "dependencies": {
+    "chalk": "1.1.3",
     "cli-table": "0.3.1",
     "commander": "2.9.0",
     "eslint": "3.19.0",
@@ -22,5 +24,8 @@
     "lint": "eslint src",
     "pretest": "yarn run build-parser",
     "test": "jest --coverage"
-  }
+  },
+  "files": [
+    "src"
+  ]
 }
