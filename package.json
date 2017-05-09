@@ -4,6 +4,10 @@
   "main": "index.js",
   "license": "MIT",
   "bin": "./src/cli.js",
+  "repository": {
+    "type" : "git",
+    "url" : "https://github.com/echo-health/firebase-shell"
+  },
   "dependencies": {
     "chalk": "1.1.3",
     "cli-table": "0.3.1",
