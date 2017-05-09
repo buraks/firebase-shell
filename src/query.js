@@ -60,10 +60,10 @@ function applyLimit({ limit }) {
         if (limit === null) {
             return ref;
         }
-        if (limit > 0) {
+        if (limit >= 0) {
             return ref.limitToFirst(limit);
         }
-        return ref.limitToLast(limit);
+        return ref.limitToLast(Math.abs(limit));
     };
 }
 

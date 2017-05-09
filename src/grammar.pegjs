@@ -1,5 +1,5 @@
 Query =
-	fields:SelectStatement
+    fields:SelectStatement
     Whitespace
     path: FromStatement
     Whitespace?
@@ -7,7 +7,7 @@ Query =
     Whitespace?
     limit:LimitStatement?
     Whitespace? {
-    	return {
+        return {
             fields,
             path,
             limit,
@@ -16,36 +16,36 @@ Query =
     }
 
 SelectStatement =
-	KeywordSelect
+    KeywordSelect
     Whitespace
     fields:Fields {
       return fields;
   }
 
 FromStatement =
-	KeywordFrom
+    KeywordFrom
     Whitespace
     path:Path {
-    	return path;
+        return path;
     }
 
 LimitStatement =
-	KeywordLimit
+    KeywordLimit
     Whitespace
     limit:Number {
-    	return limit
+        return limit
     }
 
 WhereStatement =
-	KeywordWhere
+    KeywordWhere
     Whitespace
     path:Path
     Whitespace
     operator:Operator
     Whitespace
     value:LiteralValue {
-    	return {
-        	path,
+        return {
+            path,
             operator,
             value
         };
@@ -61,31 +61,31 @@ KeywordLimit =
     "limit"i
 
 KeywordWhere =
-	"where"i
+    "where"i
 
 Fields =
-	"*" /
+    "*" /
     head:Path tail:(Whitespace? Comma Whitespace? Path)* {
-    	var result = [head];
-    	for (var i = 0; i < tail.length; i++) {
-      		result.push(tail[i][3]);
-    	}
-    	return result;
+        var result = [head];
+        for (var i = 0; i < tail.length; i++) {
+              result.push(tail[i][3]);
+        }
+        return result;
     }
 
 Path =
-	head:Key tail:(PathSeperator Key)* {
-    	let path = head;
+    head:Key tail:(PathSeperator Key)* {
+        let path = head;
         for (const p of tail) {
-        	path += '/' + p[1];
+            path += '/' + p[1];
         }
         return path;
     }
 
 Key =
     "[]" /
-	k:[^\.\$#\[\]\/ ,]+ {
-    	return k.join('');
+    k:[^\.\$#\[\]\/ ,]+ {
+        return k.join('');
     }
 
 PathSeperator =
@@ -95,7 +95,7 @@ Comma =
     ","
 
 Operator =
-	"==" { return '='; } /
+    "==" { return '='; } /
     ">=" /
     "<=" /
     "="
@@ -120,7 +120,7 @@ String =
         return chars.join('');
     } /
     "'" chars:[^']* "'" {
-    	return chars.join('');
+        return chars.join('');
     }
 
 Boolean =
