@@ -1,4 +1,7 @@
+![firebase-shell logo](https://cloud.githubusercontent.com/assets/1671025/25864392/31541d12-34e7-11e7-9bed-aec2c1a2ef5d.png)
+
 # Firebase Shell
+[![Build Status](https://travis-ci.org/echo-health/firebase-shell.svg?branch=master)](https://travis-ci.org/echo-health/firebase-shell) [![npm version](https://img.shields.io/npm/v/firebase-shell.svg?style=flat)](https://www.npmjs.com/package/firebase-shell) [![Build Status](https://img.shields.io/travis/echo-health/firebase-shell/master.svg?style=flat)](https://travis-ci.org/echo-health/firebase-shell)
 
 A Node.js command line tool for executing queries against a Firebase database using an SQL-like syntax.
 
