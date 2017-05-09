@@ -1,4 +1,4 @@
-![firebase-shell logo](https://cloud.githubusercontent.com/assets/1671025/25864392/31541d12-34e7-11e7-9bed-aec2c1a2ef5d.png)
+<div><img height="141" src="https://cloud.githubusercontent.com/assets/1671025/25864392/31541d12-34e7-11e7-9bed-aec2c1a2ef5d.png" /></div>
 
 # Firebase Shell
 [![Build Status](https://img.shields.io/travis/echo-health/firebase-shell/master.svg?style=flat)](https://travis-ci.org/echo-health/firebase-shell) [![npm version](https://img.shields.io/npm/v/firebase-shell.svg?style=flat)](https://www.npmjs.com/package/firebase-shell)
