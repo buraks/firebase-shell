@@ -47,6 +47,15 @@ const parser = require('../parser');
         },
     ],
     [
+        'SELECT foo/bar FROM baz/bop LIMIT -10',
+        {
+            fields: ['foo/bar'],
+            limit: -10,
+            path: 'baz/bop',
+            where: null,
+        },
+    ],
+    [
         'SELECT foo/bar FROM baz/bop WHERE someNumber = 42 LIMIT 10',
         {
             fields: ['foo/bar'],
@@ -96,6 +105,54 @@ const parser = require('../parser');
                 operator: '=',
                 value: 'Harry',
             },
+        },
+    ],
+    [
+        'SELECT * FROM customers WHERE hobby = null',
+        {
+            fields: '*',
+            limit: null,
+            path: 'customers',
+            where: {
+                path: 'hobby',
+                operator: '=',
+                value: null,
+            },
+        },
+    ],
+    [
+        'SELECT * FROM customers WHERE isActive = false',
+        {
+            fields: '*',
+            limit: null,
+            path: 'customers',
+            where: {
+                path: 'isActive',
+                operator: '=',
+                value: false,
+            },
+        },
+    ],
+    [
+        'SELECT * FROM customers WHERE isActive = true',
+        {
+            fields: '*',
+            limit: null,
+            path: 'customers',
+            where: {
+                path: 'isActive',
+                operator: '=',
+                value: true,
+            },
+        },
+    ],
+    [
+        'SELECT []/name FROM customers',
+        {
+            fields: ['[]/name'],
+            limit: null,
+            path: 'customers',
+            where: null,
         },
     ],
 ].forEach(([query, result]) => {

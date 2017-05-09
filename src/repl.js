@@ -25,7 +25,8 @@ class Repl {
 
         const startTime = process.hrtime();
 
-        return query(queryOptions)
+        return query
+            .run(queryOptions)
             .then(results => {
                 const [seconds, nanoSeconds] = process.hrtime(startTime);
                 const table = new Table({
@@ -63,7 +64,6 @@ class Repl {
             name: 'command',
             message: '$',
             filter(value) {
-                const ast = parser.parse(value);
                 return {
                     query: parser.parse(value),
                     toString() {

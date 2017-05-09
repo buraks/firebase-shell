@@ -57,14 +57,36 @@ function applyWhere({ where }) {
 
 function applyLimit({ limit }) {
     return ref => {
-        if (!limit) {
+        if (limit === null) {
             return ref;
         }
-        return ref.limitToFirst(limit);
+        if (limit > 0) {
+            return ref.limitToFirst(limit);
+        }
+        return ref.limitToLast(limit);
     };
 }
 
-const queryChainMethods = [getReference, applyLimit, applyWhere];
+function expandPath(obj, path, prefix = '') {
+    const [key, ...rest] = path.split('/');
+
+    return Object.keys(obj)
+        .filter(k => k === key || key === '[]')
+        .map(k => {
+            const newPrefix = prefix ? `${prefix}/${k}` : k;
+
+            if (rest.length === 0) {
+                return newPrefix;
+            }
+
+            return expandPath(obj[k], rest.join('/'), newPrefix);
+        })
+        .reduce((flat, value) => {
+            return [...flat, ...(Array.isArray(value) ? value : [value])];
+        }, [])
+        .filter(Boolean)
+        .map(p => p.replace(/\//g, '.'));
+}
 
 function pickFields({ fields }) {
     return snapshot => {
@@ -78,15 +100,11 @@ function pickFields({ fields }) {
             return value;
         }
 
-        return Object.keys(value).reduce((result, key) => {
-            const filteredValue = pick(
-                value[key],
-                fields.map(x => x.replace(/\//g, '.'))
-            );
-            return Object.assign(result, {
-                [key]: filteredValue,
-            });
-        }, {});
+        const paths = fields.reduce((result, path) => {
+            return [...result, ...expandPath(value, path)];
+        }, []);
+
+        return pick(value, paths);
     };
 }
 
@@ -95,12 +113,20 @@ function run(options) {
     const app = firebase.initializeApp(appOptions, 'firebase-shell');
 
     const { query } = options;
-    const queryChain = flow(queryChainMethods.map(x => x(query)));
+    const buildQuery = flow(
+        [getReference, applyLimit, applyWhere].map(x => x(query))
+    );
 
-    return queryChain(app)
+    return buildQuery(app)
         .once('value')
         .then(snapshot => app.delete().then(() => snapshot))
         .then(pickFields(query));
 }
 
-module.exports = run;
+module.exports = {
+    buildAppOptions,
+    pickFields,
+    applyLimit,
+    applyWhere,
+    run,
+};

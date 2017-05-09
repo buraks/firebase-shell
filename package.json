@@ -19,7 +19,7 @@
   "scripts": {
     "build-parser": "pegjs -o src/parser.js src/grammar.pegjs",
     "format": "prettier --write --single-quote --trailing-comma es5 --tab-width 4 'src/**/*.js'",
-    "lint": "eslint .",
+    "lint": "eslint src",
     "pretest": "yarn run build-parser",
     "test": "jest --coverage"
   }

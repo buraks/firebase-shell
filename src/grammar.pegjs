@@ -43,7 +43,7 @@ WhereStatement =
     Whitespace
     operator:Operator
     Whitespace
-    value:(Number / String) {
+    value:LiteralValue {
     	return {
         	path,
             operator,
@@ -64,8 +64,8 @@ KeywordWhere =
 	"where"i
 
 Fields =
-	"*"
-    / head:Path tail:(Whitespace? Comma Whitespace? Path)* {
+	"*" /
+    head:Path tail:(Whitespace? Comma Whitespace? Path)* {
     	var result = [head];
     	for (var i = 0; i < tail.length; i++) {
       		result.push(tail[i][3]);
@@ -83,6 +83,7 @@ Path =
     }
 
 Key =
+    "[]" /
 	k:[^\.\$#\[\]\/ ,]+ {
     	return k.join('');
     }
@@ -100,14 +101,18 @@ Operator =
     "="
 
 Whitespace =
-    Space+
+    " "+
 
-Space =
-    " "
+LiteralValue =
+    Number /
+    String /
+    Boolean /
+    Null
 
 Number =
-    d:[0-9]+ {
-        return Number(d.join(''))
+    minus:"-"? d:[0-9]+ {
+        const value = Number(d.join(''));
+        return minus ? -value : value;
     }
 
 String =
@@ -116,4 +121,17 @@ String =
     } /
     "'" chars:[^']* "'" {
     	return chars.join('');
+    }
+
+Boolean =
+    "true"i {
+        return true;
+    } /
+    "false"i {
+        return false;
+    }
+
+Null =
+    "null"i {
+        return null;
     }
