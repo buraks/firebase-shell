@@ -66,14 +66,16 @@ You can see all options by using `--help`:
 ```
 $ firebase-shell --help
 
-  Usage: cli [options]
+  Usage: firebase-shell [options]
 
   Options:
 
     -h, --help                      output usage information
     -c --credentials <credentials>  Path to your Firebase credentials file
-    -u --url <databaseUrl>          URL of your Firebase DB
+    -u --url <databaseUrl>          URL of your Firebase database
     -a --auth <auth>                Auth uid variable override
+    -o --output <output>            The format to use when outputing results. Options are table, json, and jsonPretty. Defaults to table.
+    -q --query <query>              An optional query to run. If provided the result will be send to stdout and the program will be exited.
 ```
 
 The value of the `--auth` option (if provided) will be used for the `uid` property of the [`databaseAuthVariableOverride`](https://firebase.google.com/docs/reference/admin/node/admin.app.AppOptions#databaseAuthVariableOverride) option. So `--auth admin` would result in the app being initialized in the following way:

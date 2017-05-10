@@ -1,15 +1,15 @@
 const inquirer = require('inquirer');
-const Table = require('cli-table');
-const isPlainObject = require('lodash/isPlainObject');
 const Rx = require('rx');
 const parser = require('./parser');
 const query = require('./query');
+const printer = require('./printer');
 
 class Repl {
-    constructor({ credentials, url, auth }) {
+    constructor({ credentials, url, auth, output = 'table' }) {
         this.credentials = credentials;
         this.auth = auth;
         this.url = url;
+        this.output = output;
         this.prompts = new Rx.Subject();
         this.inquirer = inquirer.prompt(this.prompts);
         this.inquirer.ui.process.subscribe(this.onSubmit.bind(this));
@@ -23,36 +23,11 @@ class Repl {
             query: event.answer.query,
         };
 
-        const startTime = process.hrtime();
-
         return query
             .run(queryOptions)
-            .then(results => {
-                const [seconds, nanoSeconds] = process.hrtime(startTime);
-                const table = new Table({
-                    head: ['Key', 'Value'],
-                });
-
-                let resultsCount = 0;
-
-                if (isPlainObject(results)) {
-                    Object.keys(results).forEach(key => {
-                        resultsCount += 1;
-                        table.push([
-                            key,
-                            JSON.stringify(results[key], null, 2),
-                        ]);
-                    });
-                }
-
-                console.log(table.toString());
-                console.log(`Results: ${resultsCount}`);
-                console.log(
-                    `Time taken: ${seconds} seconds ${nanoSeconds / 1000000} ms`
-                );
-            })
+            .then(printer[this.output])
             .catch(e => {
-                console.log('error', e);
+                console.log('Error running query', e);
             })
             .then(() => {
                 process.nextTick(() => this.showPrompt());
