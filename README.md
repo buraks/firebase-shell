@@ -78,6 +78,7 @@ $ firebase-shell --help
     -q --query <query>              An optional query to run. If provided the result will be send to stdout and the program will be exited.
 ```
 
+#### `--auth`
 The value of the `--auth` option (if provided) will be used for the `uid` property of the [`databaseAuthVariableOverride`](https://firebase.google.com/docs/reference/admin/node/admin.app.AppOptions#databaseAuthVariableOverride) option. So `--auth admin` would result in the app being initialized in the following way:
 
 ```
@@ -86,6 +87,15 @@ const admin = firebase.initializeApp({
         uid: 'admin',
     },
 })
+```
+
+#### Pipeing output into another program
+One use case might be to pipe the results of your query into another program, for example [`jq`](https://stedolan.github.io/jq/). You can acheive this by using the `--query` and `--output` options. For example:
+
+```
+$ firebase-shell --query 'select * from customers where age >= 18' --output json | jq '..|.name?|strings'
+"Harry"
+"Barry"
 ```
 
 ## Running Queries
